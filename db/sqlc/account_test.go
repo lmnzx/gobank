@@ -18,9 +18,9 @@ func createRandomAccount(t *testing.T) Account {
 	}
 
 	account, err := testQueries.CreateAccount(context.Background(), arg)
-
 	require.NoError(t, err)
 	require.NotEmpty(t, account)
+
 	require.Equal(t, arg.Owner, account.Owner)
 	require.Equal(t, arg.Balance, account.Balance)
 	require.Equal(t, arg.Currency, account.Currency)
@@ -31,16 +31,13 @@ func createRandomAccount(t *testing.T) Account {
 	return account
 }
 
-// TestCreateAccount tests the CreateAccount function
-func TestCreateAccoutn(t *testing.T) {
+func TestCreateAccount(t *testing.T) {
 	createRandomAccount(t)
 }
 
-// TestGetAccount tests the GetAccount function
 func TestGetAccount(t *testing.T) {
 	account1 := createRandomAccount(t)
 	account2, err := testQueries.GetAccount(context.Background(), account1.ID)
-
 	require.NoError(t, err)
 	require.NotEmpty(t, account2)
 
@@ -51,7 +48,6 @@ func TestGetAccount(t *testing.T) {
 	require.WithinDuration(t, account1.CreatedAt, account2.CreatedAt, time.Second)
 }
 
-// TestUpdateAccount tests the UpdateAccount function
 func TestUpdateAccount(t *testing.T) {
 	account1 := createRandomAccount(t)
 
@@ -61,7 +57,6 @@ func TestUpdateAccount(t *testing.T) {
 	}
 
 	account2, err := testQueries.UpdateAccount(context.Background(), arg)
-
 	require.NoError(t, err)
 	require.NotEmpty(t, account2)
 
@@ -70,13 +65,10 @@ func TestUpdateAccount(t *testing.T) {
 	require.Equal(t, arg.Balance, account2.Balance)
 	require.Equal(t, account1.Currency, account2.Currency)
 	require.WithinDuration(t, account1.CreatedAt, account2.CreatedAt, time.Second)
-
 }
 
-// TestDeleteAccount tests the DeleteAccount function
 func TestDeleteAccount(t *testing.T) {
 	account1 := createRandomAccount(t)
-
 	err := testQueries.DeleteAccount(context.Background(), account1.ID)
 	require.NoError(t, err)
 
@@ -86,7 +78,6 @@ func TestDeleteAccount(t *testing.T) {
 	require.Empty(t, account2)
 }
 
-// TestListAccounts test the ListAccounts function
 func TestListAccounts(t *testing.T) {
 	for i := 0; i < 10; i++ {
 		createRandomAccount(t)
@@ -98,7 +89,6 @@ func TestListAccounts(t *testing.T) {
 	}
 
 	accounts, err := testQueries.ListAccounts(context.Background(), arg)
-
 	require.NoError(t, err)
 	require.Len(t, accounts, 5)
 

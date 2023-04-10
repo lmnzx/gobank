@@ -10,12 +10,9 @@ import (
 )
 
 func createRandomEntry(t *testing.T, account Account) Entry {
-
 	arg := CreateEntryParams{
-
 		AccountID: account.ID,
-
-		Amount: util.RandMoney(),
+		Amount:    util.RandMoney(),
 	}
 
 	entry, err := testQueries.CreateEntry(context.Background(), arg)
@@ -31,13 +28,11 @@ func createRandomEntry(t *testing.T, account Account) Entry {
 	return entry
 }
 
-// TestCreateEntry tests the CreateEntry function
 func TestCreateEntry(t *testing.T) {
 	account := createRandomAccount(t)
 	createRandomEntry(t, account)
 }
 
-// TestGetEntry tests the GetEntry function
 func TestGetEntry(t *testing.T) {
 	account := createRandomAccount(t)
 	entry1 := createRandomEntry(t, account)
@@ -51,7 +46,6 @@ func TestGetEntry(t *testing.T) {
 	require.WithinDuration(t, entry1.CreatedAt, entry2.CreatedAt, time.Second)
 }
 
-// TestListEntries test the ListEntries function
 func TestListEntries(t *testing.T) {
 	account := createRandomAccount(t)
 	for i := 0; i < 10; i++ {
