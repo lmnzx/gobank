@@ -90,6 +90,7 @@ func (store *Store) TransferTx(ctx context.Context, arg CreateTransferParams) (T
 			return err
 		}
 
+		// TODO: check this logic
 		if arg.FromAccountID.ClockSequence() < arg.ToAccountID.ClockSequence() {
 			result.FromAccount, result.ToAccount, err = addMoney(ctx, q, arg.FromAccountID, -arg.Amount, arg.ToAccountID, arg.Amount)
 		} else {
