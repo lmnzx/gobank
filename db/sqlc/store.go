@@ -4,6 +4,8 @@ import (
 	"context"
 	"database/sql"
 	"fmt"
+
+	"github.com/google/uuid"
 )
 
 // Store provides all functions to execute db queries and transaction
@@ -41,9 +43,9 @@ func (store *Store) execTx(ctx context.Context, fn func(*Queries) error) error {
 
 // TransferTxParams contains the input parameters of the transfer transaction
 type TransferTxParams struct {
-	FromAccountID int64 `json:"from_account_id"`
-	ToAccountID   int64 `json:"to_account_id"`
-	Amount        int64 `json:"amount"`
+	FromAccountID uuid.UUID `json:"from_account_id"`
+	ToAccountID   uuid.UUID `json:"to_account_id"`
+	Amount        int64     `json:"amount"`
 }
 
 // TransferTxResult is the result of the transfer transaction
@@ -88,7 +90,7 @@ func (store *Store) TransferTx(ctx context.Context, arg CreateTransferParams) (T
 			return err
 		}
 
-		if arg.FromAccountID < arg.ToAccountID {
+		if arg.FromAccountID.ClockSequence() < arg.ToAccountID.ClockSequence() {
 			result.FromAccount, result.ToAccount, err = addMoney(ctx, q, arg.FromAccountID, -arg.Amount, arg.ToAccountID, arg.Amount)
 		} else {
 			result.ToAccount, result.FromAccount, err = addMoney(ctx, q, arg.ToAccountID, arg.Amount, arg.FromAccountID, -arg.Amount)
@@ -103,9 +105,9 @@ func (store *Store) TransferTx(ctx context.Context, arg CreateTransferParams) (T
 func addMoney(
 	ctx context.Context,
 	q *Queries,
-	accountID1 int64,
+	accountID1 uuid.UUID,
 	amount1 int64,
-	accountID2 int64,
+	accountID2 uuid.UUID,
 	amount2 int64,
 ) (account1 Account, account2 Account, err error) {
 	account1, err = q.AddAccountBalance(ctx, AddAccountBalanceParams{
