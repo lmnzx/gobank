@@ -1,5 +1,7 @@
+CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
+
 CREATE TABLE "accounts" (
-  "id" bigserial PRIMARY KEY,
+  "id" uuid PRIMARY KEY DEFAULT uuid_generate_v4(),
   "owner" varchar NOT NULL,
   "balance" bigint NOT NULL,
   "currency" varchar NOT NULL,
@@ -7,16 +9,16 @@ CREATE TABLE "accounts" (
 );
 
 CREATE TABLE "entries" (
-  "id" bigserial PRIMARY KEY,
-  "account_id" bigint NOT NULL,
+  "id" uuid PRIMARY KEY DEFAULT uuid_generate_v4(),
+  "account_id" uuid NOT NULL,
   "amount" bigint NOT NULL,
   "created_at" timestamptz NOT NULL DEFAULT (now())
 );
 
 CREATE TABLE "transfers" (
-  "id" bigserial PRIMARY KEY,
-  "from_account_id" bigint NOT NULL,
-  "to_account_id" bigint NOT NULL,
+  "id" uuid PRIMARY KEY DEFAULT uuid_generate_v4(),
+  "from_account_id" uuid NOT NULL,
+  "to_account_id" uuid NOT NULL,
   "amount" bigint NOT NULL,
   "created_at" timestamptz NOT NULL DEFAULT (now())
 );
