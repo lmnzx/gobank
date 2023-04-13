@@ -18,7 +18,10 @@ migratedown:
 test:
 	go test -v -cover ./...
 
+mock:
+	mockgen -package mockdb -destination db/mock/store.go github.com/lmnzx/gobank/db/sqlc Store
+
 server:
 	go run main.go
 
-.PHONY: postgres createdb dropdb migrateup migratedown test server
+.PHONY: postgres createdb dropdb migrateup migratedown test mock server
